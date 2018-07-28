@@ -1,4 +1,4 @@
-# nitewatch [![dependencies Status](https://david-dm.org/thefenderstory/nitewatch/status.svg)](https://david-dm.org/thefenderstory/nitewatch) [![devDependencies Status](https://david-dm.org/thefenderstory/nitewatch/dev-status.svg)](https://david-dm.org/thefenderstory/nitewatch?type=dev)
+# nitewatch [![travis Status](https://travis-ci.org/TheFenderStory/nitewatch.svg?branch=master)](https://travis-ci.org/TheFenderStory/nitewatch) [![dependencies Status](https://david-dm.org/thefenderstory/nitewatch/status.svg)](https://david-dm.org/thefenderstory/nitewatch) [![devDependencies Status](https://david-dm.org/thefenderstory/nitewatch/dev-status.svg)](https://david-dm.org/thefenderstory/nitewatch?type=dev)
 nitewatch monitors files within your project for changes and then automatically runs scripts or commands 
 you have to defined. For example, nitewatch can automatically recompile code in a project when a file is modified,
 sparing you the overhead and letting you focus on writing code.
