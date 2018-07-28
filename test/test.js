@@ -37,21 +37,12 @@ describe('parseOptions tests', function() {
 			assert.equal(options.dirs[0], process.cwd());
 		});
 	});
-
-	describe('#parseOptions()', function() {
-		it('Should return options set by the user via an options object', function() {
-			let options = nitewatch.parseOptions();
-			assert.equal(options.ignore.length, 3);
-			assert.equal(options.scripts.length, 1);
-			assert.equal(options.dirs[0], "./");
-		});
-	});
 });
 
 describe('parseYml tests', function() {
 	describe('#parseYml(path)', function() {
 		it('Should read in .nitewatch.yml and parse options from it', function() {
-			let options = nitewatch.parseYml("./.nitewatch.yml");
+			let options = nitewatch.parseYml(`${process.cwd()}/test/.nitewatch.yml`);
 			assert.equal(options.dirs.includes("src"), true);
 			assert.equal(options.ignore.includes("test"), true);
 			assert.equal(options.scripts.includes("echo hi"), true);
