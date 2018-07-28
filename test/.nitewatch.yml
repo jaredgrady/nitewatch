@@ -1,0 +1,10 @@
+dirs:
+    - .
+    - src
+    - test
+ignore:
+    - test
+    - node_modules
+    - README.md
+scripts:
+    - echo hi

@@ -1,0 +1,25 @@
+{
+  "name": "nitewatch",
+  "version": "1.0.0",
+  "description": "Watch for file changes and run scripts easily",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "test": "eslint src/index.js && mocha"
+  },
+  "bin": {
+    "nitewatch": "./bin/nitewatch-global.js"
+  },
+  "preferGlobal": true,
+  "author": "Jared Grady <jaredgrady@email.arizona.edu>",
+  "license": "MIT",
+  "devDependencies": {
+    "eslint": "^5.2.0",
+    "mocha": "^5.2.0"
+  },
+  "dependencies": {
+    "command-line-args": "^5.0.2",
+    "js-yaml": "^3.12.0",
+    "md5": "^2.2.1"
+  }
+}
