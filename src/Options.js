@@ -27,10 +27,16 @@ class Options {
 
 	setUserIgnoredFiles(files) {
 		this.ignoreFiles = files;
+		for (let file of Object.keys(this.ignoreFiles)) {
+			this.ignoredFilesGlobs.push(file);
+		}
 	}
 
 	setUserIgnoredDirs(dirs) {
 		this.ignoredDirs = dirs;
+		for (let file of Object.keys(this.ignoredDirs)) {
+			this.ignoredDirsGlobs.push(file);
+		}
 	}
 
 	setUserScripts(scripts) {
