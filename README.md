@@ -3,6 +3,9 @@ nitewatch monitors files within your project for changes and then automatically 
 you have to defined. For example, nitewatch can automatically recompile code in a project when a file is modified,
 sparing you the overhead and letting you focus on writing code.
 
+## Notice
+nitewatch is under active development and breaking changes may occur. Use with caution.
+
 ## Install
 
 Install globally
