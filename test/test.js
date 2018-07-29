@@ -8,44 +8,62 @@
  *
 **/
 const assert = require("assert");
-const nitewatch = require("../src/index.js");
+const path = require('path');
+const nitewatch = require(path.resolve(__dirname, "../src/nitewatch.js")).test;
+const Options = require(path.resolve(__dirname, "../src/Options.js"));
 
-describe('validFile tests', function() {
-	describe('#validFile("test.js", ".", ["test.js"])', function() {
-		it('Should return false if the file is ignored', function() {
-			assert.equal(nitewatch.validFile("test.js", `${process.cwd()}/test`, ["test.js"]), false);
+describe('parseYaml tests', function() {
+	describe('#options.parseYaml(".")', function() {
+		it('Should return parse the yaml in tests and build the correct options', function() {
+			let options = new Options();
+			options.parseYaml(path.join(__dirname));
+			assert.ok(options.ignoredFiles["src/testhelper.js"]);
+			assert.ok(options.ignoredDirs["node_modules"]);
 		});
 	});
 
-	describe('#validFile("test.js", ".", ["example"])', function() {
-		it('Should return true if the file should be watched', function() {
-			assert.equal(nitewatch.validFile("test.js", `${process.cwd()}/test`, ["example"]), true);
-		});
-	});
-});
-
-describe('parseOptions tests', function() {
-	describe('#parseOptions({vals})', function() {
-		it('Should return options set by the user via an options object', function() {
-			let options = nitewatch.parseOptions({
-				ignore: ["example", "example2"],
-				scripts: ["example_script"],
-			});
-			assert.equal(options.ignore[0], "example");
-			assert.equal(options.ignore[1], "example2");
-			assert.equal(options.scripts[0], "example_script");
-			assert.equal(options.dirs[0], process.cwd());
+	describe('#options.parseYaml("../")', function() {
+		it('Should use default options since yaml cannot be found', function() {
+			let options = new Options();
+			options.parseYaml(path.join(__dirname + "../"));
+			assert.equal(Object.keys(options.ignoredFiles), 0);
+			assert.equal(Object.keys(options.ignoredDirs), 0);
 		});
 	});
 });
 
-describe('parseYml tests', function() {
-	describe('#parseYml(path)', function() {
-		it('Should read in .nitewatch.yml and parse options from it', function() {
-			let options = nitewatch.parseYml(`${process.cwd()}/test/.nitewatch.yml`);
-			assert.equal(options.dirs.includes("src"), true);
-			assert.equal(options.ignore.includes("test"), true);
-			assert.equal(options.scripts.includes("echo hi"), true);
+describe('nitewatch tests', function() {
+	let opts = new Options();
+	opts.parseYaml(path.join(__dirname));
+
+	describe('#nitewatch.isIgnoredDir("test", ignoredDirs, ignoredDirsGlobs)', function() {
+		it('Should return true because test is in ignored directories', function() {
+			assert.ok(nitewatch.isIgnoredDir("test", opts.ignoredDirs, opts.ignoredDirsGlobs));
+		});
+	});
+
+	describe('#nitewatch.isIgnoredDir("test", ignoredDirs, ignoredDirsGlobs)', function() {
+		it('Should return false because src is not ignored', function() {
+			assert.ok(!nitewatch.isIgnoredDir("src", opts.ignoredDirs, opts.ignoredDirsGlobs));
+		});
+	});
+
+	describe('#nitewatch.isIgnoredFile(".eslintrc", ignoredDirs, ignoredDirsGlobs)', function() {
+		it('Should return true because .eslintrc is an ignored file', function() {
+			assert.ok(!nitewatch.isIgnoredFile("src", opts.ignoredFiles, opts.ignoredFilesGlobs));
+		});
+	});
+
+	describe('#nitewatch.isIgnoredFile("test", ignoredFiles, ignoredFilesGlobs)', function() {
+		it('Should return false because index.js is not an ignored file', function() {
+			assert.ok(!nitewatch.isIgnoredFile("index.js", opts.ignoredFiles, opts.ignoredFilesGlobs));
+		});
+	});
+
+	describe('#nitewatch.isIgnoredFile("*.json", ignoredFiles, ignoredFilesGlobs)', function() {
+		it('Should return true because package.json should match the pattern', function() {
+			assert.ok(nitewatch.isIgnoredFile("package.json", opts.ignoredFiles, opts.ignoredFilesGlobs));
 		});
 	});
 });
+

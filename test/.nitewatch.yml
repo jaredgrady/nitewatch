@@ -1,10 +1,15 @@
-dirs:
-    - .
-    - src
-    - test
-ignore:
-    - test
+ignoreFiles:
+    - src/testhelper.js
+    - bin/nitewatch-global.js
+    - "*.json"
+    - ".eslintrc"
+    - ".git"
+    - ".gitignore"
+
+ignoredDirectories:
     - node_modules
-    - README.md
+    - .git
+    - test
+
 scripts:
-    - echo hi
+    - date
