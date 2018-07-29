@@ -1,6 +1,6 @@
 {
   "name": "nitewatch",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Watch for file changes and run scripts easily",
   "main": "src/index.js",
   "scripts": {
