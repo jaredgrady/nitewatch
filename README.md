@@ -33,6 +33,10 @@ nitewatch can also be ran from the command line when installed globally
 ```
 nitewatch -y "test" -s "./test.sh" -i "test.js" -d "node_modules" "logs"
 ```
+nitewatch can also be ran on specific files and directories with the watch command
+```
+nitewatch watch src test.js -d .* node_modules
+```
 
 If a .nitewatch.yml is found in the directory when nitewatch is run or a path to a yaml is supplied with the -y option
 nitewatch will use the yaml defined options.
