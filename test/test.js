@@ -10,7 +10,7 @@
 const assert = require("assert");
 const path = require('path');
 const nitewatch = require(path.resolve(__dirname, "..", "src", "nitewatch.js"));
-const Options = require(path.resolve(__dirname, "..", "src", "options.js"));
+const Options = require(path.resolve(__dirname, "..", "src", "Options.js"));
 
 describe('parseYaml tests', function() {
 	describe('#options.parseYaml(".")', function() {
