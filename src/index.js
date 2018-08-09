@@ -9,4 +9,5 @@
 **/
 const path = require('path');
 process.title = "nitewatch";
-module.exports.watch = require(path.resolve(__dirname, 'nitewatch.js')).watch;
+module.exports.watch = require(path.resolve(__dirname, 'Nitewatch.js')).watch;
+module.exports.watchFiles = require(path.resolve(__dirname, 'Nitewatch.js')).watchFiles;

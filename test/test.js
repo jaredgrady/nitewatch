@@ -9,14 +9,14 @@
 **/
 const assert = require("assert");
 const path = require('path');
-const nitewatch = require(path.resolve(__dirname, "../src/nitewatch.js")).test;
-const Options = require(path.resolve(__dirname, "../src/Options.js"));
+const nitewatch = require(path.resolve(__dirname, "..", "src", "nitewatch.js"));
+const Options = require(path.resolve(__dirname, "..", "src", "Options.js"));
 
 describe('parseYaml tests', function() {
 	describe('#options.parseYaml(".")', function() {
-		it('Should return parse the yaml in tests and build the correct options', function() {
-			let options = new Options();
-			options.parseYaml(path.join(__dirname));
+		it('Should parse the yaml in tests and build the correct options', function() {
+			let options = new Options(path.join(__dirname));
+			console.log(options);
 			assert.ok(options.ignoredFiles["src/testhelper.js"]);
 			assert.ok(options.ignoredDirs["node_modules"]);
 		});
@@ -24,8 +24,7 @@ describe('parseYaml tests', function() {
 
 	describe('#options.parseYaml("../")', function() {
 		it('Should use default options since yaml cannot be found', function() {
-			let options = new Options();
-			options.parseYaml(path.join(__dirname + "../"));
+			let options = new Options(path.join(__dirname + "../"));
 			assert.equal(Object.keys(options.ignoredFiles), 0);
 			assert.equal(Object.keys(options.ignoredDirs), 0);
 		});
