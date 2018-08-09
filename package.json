@@ -5,7 +5,7 @@
   "main": "src/index.js",
   "scripts": {
     "start": "node src/index.js",
-    "test": "eslint src/*.js && mocha"
+    "test": "eslint src/*.js bin/*.js && mocha"
   },
   "bin": {
     "nitewatch": "./bin/nitewatch-global.js"

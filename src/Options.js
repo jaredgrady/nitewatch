@@ -11,38 +11,83 @@ const fs = require('fs');
 const path = require('path');
 
 class Options {
-	constructor() {
+	constructor(userOpts) {
 		this.ignoredFiles = {};
 		this.ignoredFilesGlobs = [];
 		this.ignoredDirs = {};
 		this.ignoredDirsGlobs = [];
 		this.scripts = [];
+		this.workingDir = process.cwd();
+
+		if (typeof userOpts === 'string' || userOpts instanceof String) {
+			this.parseYaml(userOpts);
+		} else if (userOpts) {
+			this.setOptions(userOpts);
+		} else {
+			this.parseYaml(process.cwd());
+		}
 	}
 
-	userObjOptions(options) {
-		this.ignoreFiles = options.ignoreFiles;
-		this.ignoredDirs = options.ignoredDirs;
-		this.scripts = options.scripts;
-	}
-
-	setUserIgnoredFiles(files) {
-		this.ignoreFiles = files;
-		for (let file of Object.keys(this.ignoreFiles)) {
+	/**
+	 * setter for ignoredFiles
+	 *
+	 * @param {array} files
+	 *
+	**/
+	setIgnoredFiles(files) {
+		for (let file of files) {
+			this.ignoredFiles[file] = true;
 			this.ignoredFilesGlobs.push(file);
 		}
 	}
 
-	setUserIgnoredDirs(dirs) {
-		this.ignoredDirs = dirs;
-		for (let file of Object.keys(this.ignoredDirs)) {
-			this.ignoredDirsGlobs.push(file);
+	/**
+	 * setter for ignoredDirs
+	 *
+	 * @param {array} dirs
+	 *
+	**/
+	setIgnoredDirs(dirs) {
+		for (let dir of dirs) {
+			this.ignoredDirs[dir] = true;
+			this.ignoredDirsGlobs.push(dir);
 		}
 	}
 
-	setUserScripts(scripts) {
-		this.scripts = scripts;
+	/**
+	 * setter for scripts
+	 *
+	 * @param {array} scripts
+	 *
+	**/
+	setScripts(scripts) {
+		for (let script of scripts) {
+			this.scripts.push(script);
+		}
 	}
 
+	/**
+	 * Sets all options from the passed object
+	 *
+	 * @param {object} opts
+	 *
+	**/
+	setOptions(opts) {
+		if ("ignoreFiles" in opts) this.setIgnoredFiles(opts.ignoreFiles);
+		if ("ignoredDirs" in opts) this.setIgnoredDirs(opts.ignoredDirs);
+		// for backwards compatibility
+		if ("ignoredDirectories" in opts) this.setIgnoredDirs(opts.ignoredDirectories);
+		if ("scripts" in opts) this.setScripts(opts.scripts);
+		if ("workingDir" in opts) this.workingDir = opts.workingDir;
+	}
+
+	/**
+	 * Checks to see if a yaml file is present at the passed yamlPath
+	 * and parses it for options
+	 *
+	 * @param {string} yamlPath
+	 *
+	**/
 	parseYaml(yamlPath) {
 		const yaml = require("js-yaml");
 		let opts = null;
@@ -51,23 +96,11 @@ class Options {
 			opts = yaml.safeLoad(fs.readFileSync(path.join(yamlPath, ".nitewatch.yml")));
 		} catch (e) {
 			console.log(`Unable to read ${path.join(yamlPath, ".nitewatch.yml")}. Using default options instead.`);
-			return opts;
+			return;
 		}
 
 		console.log("Found .nitewatch.yml. Reading options...");
-		for (let file of opts.ignoreFiles) {
-			this.ignoredFiles[file] = true;
-			this.ignoredFilesGlobs.push(file);
-		}
-
-		for (let dir of opts.ignoredDirectories) {
-			this.ignoredDirs[dir] = true;
-			this.ignoredDirsGlobs.push(dir);
-		}
-
-		for (let script of opts.scripts) {
-			this.scripts.push(script);
-		}
+		this.setOptions(opts);
 	}
 }
 
