@@ -66,7 +66,7 @@ class Nitewatch {
 					if (stderr.length > 0) console.log(`${stderr.trim()}`);
 
 					if (error !== null) {
-						console.log(`exec error: ${error.trim()}`);
+						console.log(`exec error: ${error}`);
 					}
 				});
 			} else {
@@ -142,10 +142,14 @@ class Nitewatch {
 		console.log("Starting nitewatch and listening for file changes...");
 		for (let file of files) {
 			fs.lstat(file, function (err, stat) {
-				if (stat.isFile()) {
-					Nitewatch.watchFile(path.join(process.cwd(), file), options.scripts);
-				} else if (stat.isDirectory()) {
-					Nitewatch.walkDir(path.join(process.cwd(), file), options);
+				if (err) {
+					console.log(`No such file or directory: ${file}`);
+				} else {
+					if (stat.isFile()) {
+						Nitewatch.watchFile(path.join(process.cwd(), file), options.scripts);
+					} else if (stat.isDirectory()) {
+						Nitewatch.walkDir(path.join(process.cwd(), file), options);
+					}
 				}
 			});
 		}
