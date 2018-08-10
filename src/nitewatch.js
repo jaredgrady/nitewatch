@@ -14,6 +14,7 @@ const md5 = require('md5');
 const path = require('path');
 const Options = require(path.resolve(__dirname, 'Options.js'));
 const walk = require('fs-walk');
+let running = false;
 
 class Nitewatch {
 	/**
@@ -57,6 +58,7 @@ class Nitewatch {
 	 *
 	**/
 	static execScripts(scripts) {
+		running = true;
 		scripts.forEach(script => {
 			if (script) {
 				exec(script, (error, stdout, stderr) => {
@@ -68,6 +70,7 @@ class Nitewatch {
 					if (error !== null) {
 						console.log(`exec error: ${error}`);
 					}
+					running = false;
 				});
 			} else {
 				console.log(`Could not run script: ${script.trim()}`);
@@ -93,12 +96,13 @@ class Nitewatch {
 				wait = setTimeout(() => {
 					wait = false;
 				}, 100);
-
-				const md5Cur = md5(fs.readFileSync(filepath));
-				if (md5Cur !== md5Hash) {
-					md5Hash = md5Cur;
-					console.log(`${filename} modified. Running user scripts`);
-					Nitewatch.execScripts(scripts);
+				if (!running) {
+					const md5Cur = md5(fs.readFileSync(filepath));
+					if (md5Cur !== md5Hash) {
+						md5Hash = md5Cur;
+						console.log(`${filename} modified. Running user scripts`);
+						Nitewatch.execScripts(scripts);
+					}
 				}
 			}
 		});
