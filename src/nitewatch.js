@@ -149,10 +149,11 @@ class Nitewatch {
 				if (err) {
 					console.log(`No such file or directory: ${file}`);
 				} else {
+					let fullpath = path.join(process.cwd(), file);
 					if (stat.isFile()) {
-						Nitewatch.watchFile(path.join(process.cwd(), file), options.scripts);
+						Nitewatch.watchFile(fullpath, md5(fs.readFileSync(fullpath)), options.scripts);
 					} else if (stat.isDirectory()) {
-						Nitewatch.walkDir(path.join(process.cwd(), file), options);
+						Nitewatch.walkDir(fullpath, options);
 					}
 				}
 			});
